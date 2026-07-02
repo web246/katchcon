@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="forest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — KATCHCON</title>
+<meta name="description" content="A proven track record of engineering excellence across the African continent.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="page-backdrop" class="page-backdrop"></div>
+<nav id="navbar" class="navbar"></nav>
+<div id="mobile-menu" class="mobile-menu"></div>
+
+<main>
+
+  <section style="padding-top:160px;padding-bottom:64px;position:relative;">
+    <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--teal) 12%, transparent), transparent 60%);z-index:-1;"></div>
+    <div class="container">
+      <div class="center-col reveal">
+        <span class="mono-label">Portfolio</span>
+        <h1 class="h1-hero">The Grid of <span class="text-amber-dark">Impact</span></h1>
+        <p class="section-desc" style="margin:24px auto 40px;">A proven track record of engineering excellence across the African continent. Each project demonstrates our commitment to quality, innovation, and sustainable development.</p>
+        <div class="hero-stats" style="justify-content:center;">
+          <div class="stat-item"><div class="stat-num">100+</div><div class="caption">Projects</div></div>
+          <div class="stat-item"><div class="stat-num">20+</div><div class="caption">Countries</div></div>
+          <div class="stat-item"><div class="stat-num">10+</div><div class="caption">Years</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container"><div class="spark-line"></div></div>
+
+  <section>
+    <div class="container">
+      <div class="filter-bar reveal" style="margin-bottom:48px;" id="filter-bar">
+        <button class="filter-pill active" data-filter="All">All</button>
+        <button class="filter-pill" data-filter="Solar Power">Solar Power</button>
+        <button class="filter-pill" data-filter="Wind Power">Wind Power</button>
+        <button class="filter-pill" data-filter="Hydroelectric">Hydroelectric</button>
+        <button class="filter-pill" data-filter="Transmission">Transmission</button>
+        <button class="filter-pill" data-filter="Distribution">Distribution</button>
+        <button class="filter-pill" data-filter="Energy Efficiency">Energy Efficiency</button>
+        <button class="filter-pill" data-filter="Energy Storage">Energy Storage</button>
+      </div>
+      <div class="project-grid" id="projects-grid"></div>
+    </div>
+  </section>
+  <div class="container"><div class="spark-line"></div></div>
+
+  <section>
+    <div class="container center-col reveal">
+      <h2 class="h2-section">Have a Project in Mind?</h2>
+      <p class="section-desc" style="margin:0 auto 24px;">Let us bring our engineering expertise to your next power and energy project.</p>
+      <a href="contact.html" class="btn btn-primary">Start a Conversation &rarr;</a>
+    </div>
+  </section>
+
+</main>
+
+<footer id="footer"></footer>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/main.js"></script>
+<script>
+  window.ACTIVE_PAGE = "projects";
+  document.addEventListener("DOMContentLoaded", () => {
+    const grid = document.getElementById("projects-grid");
+    grid.innerHTML = PROJECTS.map(p => `
+      <div class="project-card energy-trace" data-category="${p.category}">
+        <img src="${p.image}" alt="${p.title}">
+        <div class="project-grad"><span class="cat">${p.category}</span><h3>${p.title}</h3></div>
+        <div class="project-hover">
+          <div class="stat"><div>${icon('zap',18)}</div><div class="num">${p.capacity}</div></div>
+          <div class="divider"></div>
+          <div class="stat"><div>${icon('mapPin',18)}</div><div class="num" style="font-size:14px;">${p.location} &middot; ${p.year}</div></div>
+        </div>
+      </div>`).join("");
+  });
+</script>
+<script src="js/projects-filter.js"></script>
+</body>
+</html>

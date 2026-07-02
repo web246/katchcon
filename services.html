@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="forest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — KATCHCON</title>
+<meta name="description" content="Engineering services across the power spectrum — solar, wind, hydroelectric, transmission & distribution, energy efficiency, and energy storage.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="page-backdrop" class="page-backdrop"></div>
+<nav id="navbar" class="navbar"></nav>
+<div id="mobile-menu" class="mobile-menu"></div>
+
+<main>
+
+  <section style="padding-top:160px;padding-bottom:64px;">
+    <div class="container">
+      <div class="center-col reveal">
+        <span class="mono-label">Our Expertise</span>
+        <h1 class="h1-hero">Engineering <span class="text-teal">Services</span> Across the Power Spectrum</h1>
+        <p class="section-desc" style="margin:24px auto 0;">Active in four major Power and Energy sectors — from upstream development through implementation, testing, and commissioning.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0;">
+    <div class="container" id="services-list"></div>
+  </section>
+
+</main>
+
+<footer id="footer"></footer>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/main.js"></script>
+<script>
+  window.ACTIVE_PAGE = "services";
+  document.addEventListener("DOMContentLoaded", () => {
+    const wrap = document.getElementById("services-list");
+    wrap.innerHTML = SERVICES.map((s, i) => `
+      <div class="service-row reveal${i % 2 === 1 ? ' reverse' : ''}">
+        <div class="img-col"><img src="${s.image}" alt="${s.title}"></div>
+        <div>
+          <div class="big-num">${s.number}</div>
+          <div class="title-row"><div class="icon-box">${icon(s.icon, 22)}</div><h2>${s.title}</h2></div>
+          <p class="desc">${s.short}</p>
+          <ul class="cap-grid">
+            ${s.capabilities.map(c => `<li><span class="cap-dot"></span>${c}</li>`).join("")}
+          </ul>
+          <a href="service-detail.html?slug=${s.slug}" class="btn btn-outline-teal">View Details &rarr;</a>
+        </div>
+      </div>
+    `).join("");
+    wrap.querySelectorAll(".reveal").forEach(el => {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });
+      }, { threshold: 0.1 });
+      io.observe(el);
+    });
+  });
+</script>
+</body>
+</html>

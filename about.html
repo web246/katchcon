@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="forest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — KATCHCON</title>
+<meta name="description" content="KATCHCON is a privately owned organization incorporated in the Republic of Kenya in August 2012, delivering engineering consultancy across sub-Saharan Africa.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="page-backdrop" class="page-backdrop"></div>
+<nav id="navbar" class="navbar"></nav>
+<div id="mobile-menu" class="mobile-menu"></div>
+
+<main>
+
+  <section style="padding-top:160px;">
+    <div class="container">
+      <div class="grid grid-2" style="align-items:center;">
+        <div class="reveal">
+          <span class="mono-label">About Us</span>
+          <h1 class="h1-hero">Engineering the <span class="text-teal">Future</span> of Africa's Energy</h1>
+          <p style="margin-top:24px;color:var(--muted-foreground);">KATCHCON is a privately owned organization incorporated in the Republic of Kenya in August 2012. We specialize in the provision of engineering consulting services within the sub-Saharan Africa region, delivering excellence across power generation, transmission, distribution, and energy storage sectors.</p>
+        </div>
+        <div class="bubble-wrap reveal" style="width:360px;height:360px;margin:0 auto;">
+          <div class="bubble-glow"></div>
+          <div class="bubble-morph">
+            <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/aa9e21a8c_generated_d5f78eeb.png" alt="Engineers inspecting solar installation">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container"><div class="spark-line"></div></div>
+
+  <!-- MISSION & VISION -->
+  <section>
+    <div class="container">
+      <div class="grid grid-2">
+        <div class="mission-card reveal">
+          <div class="icon-box"></div>
+          <h3>Our Mission</h3>
+          <p>To provide high-quality, innovative engineering consultancy services that drive sustainable power and energy development across sub-Saharan Africa. We are committed to delivering solutions that meet international standards while addressing local needs.</p>
+        </div>
+        <div class="mission-card amber reveal">
+          <div class="icon-box amber"></div>
+          <h3>Our Vision</h3>
+          <p>To be a leader in the provision of high-quality engineering solutions, recognized for our technical expertise, innovation, and commitment to powering Africa's sustainable development through clean and efficient energy infrastructure.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container"><div class="spark-line"></div></div>
+
+  <!-- TEAM -->
+  <section>
+    <div class="container">
+      <div class="grid grid-2" style="align-items:center;">
+        <div class="bubble-wrap reveal" style="width:360px;height:360px;margin:0 auto;order:1;">
+          <div class="bubble-glow"></div>
+          <div class="bubble-morph">
+            <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/970204ae5_generated_f0fd13a5.png" alt="Modern electrical substation at night">
+          </div>
+        </div>
+        <div class="reveal" style="order:2;">
+          <span class="mono-label">Our Team</span>
+          <h2 class="h2-section">Expertise That Delivers</h2>
+          <p style="margin-bottom:16px;color:var(--muted-foreground);">Assembled and staffed by a complementary team of Advisors, Partners, and Technical Specialists, KATCHCON is equipped to deliver on a diverse range of power and energy projects across a broad spectrum of functional areas.</p>
+          <p style="margin-bottom:32px;color:var(--muted-foreground);">Our experts are involved in upstream development of power and energy projects through implementation, including testing and commissioning. We maintain solid partnerships with local and international firms who complement our experience.</p>
+          <div class="flex gap-6">
+            <div><div class="stat-num" data-counter="20" data-suffix="+" style="font-size:30px;font-weight:900;color:var(--teal);">0+</div><div class="caption">Countries</div></div>
+            <div><div class="stat-num" data-counter="100" data-suffix="+" style="font-size:30px;font-weight:900;color:var(--teal);">0+</div><div class="caption">Completed Projects</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container"><div class="spark-line"></div></div>
+
+  <!-- CORE VALUES -->
+  <section>
+    <div class="container">
+      <div class="section-eyebrow-block reveal">
+        <span class="mono-label">Our Foundation</span>
+        <h2 class="h2-section">Core Values</h2>
+        <p class="section-desc" style="margin:0 auto;">The principles that guide every project, every decision, and every interaction.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="value-card reveal" style="transition-delay:0ms;">
+          <div class="icon-box"></div>
+          <h3>Integrity</h3>
+          <p>We uphold the highest ethical standards in every engagement, ensuring transparent and honest consultancy services.</p>
+        </div>
+        <div class="value-card reveal" style="transition-delay:80ms;">
+          <div class="icon-box"></div>
+          <h3>Excellence</h3>
+          <p>Driven by a commitment to deliver world-class engineering solutions that exceed client expectations.</p>
+        </div>
+        <div class="value-card reveal" style="transition-delay:160ms;">
+          <div class="icon-box"></div>
+          <h3>Collaboration</h3>
+          <p>We foster strong partnerships with local and international firms for efficient multi-disciplinary project delivery.</p>
+        </div>
+        <div class="value-card reveal" style="transition-delay:240ms;">
+          <div class="icon-box"></div>
+          <h3>Innovation</h3>
+          <p>Continuously adopting cutting-edge technologies and methodologies to solve complex power and energy challenges.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="footer"></footer>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/main.js"></script>
+<script>
+  window.ACTIVE_PAGE = "about";
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".mission-card .icon-box")[0].innerHTML = icon("target", 22);
+    document.querySelectorAll(".mission-card .icon-box")[1].innerHTML = icon("eye", 22);
+    const valueIcons = ["shield","award","users","lightbulb"];
+    document.querySelectorAll(".value-card .icon-box").forEach((el,i) => el.innerHTML = icon(valueIcons[i], 22));
+  });
+</script>
+</body>
+</html>

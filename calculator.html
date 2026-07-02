@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="forest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power System Sizing Calculator — KATCHCON</title>
+<meta name="description" content="Estimate your power requirements and get recommended solar PV, battery storage, and inverter sizing.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="page-backdrop" class="page-backdrop"></div>
+<nav id="navbar" class="navbar"></nav>
+<div id="mobile-menu" class="mobile-menu"></div>
+
+<main>
+  <section style="padding-top:160px;">
+    <div class="container">
+      <a href="index.html" class="back-link"></a>
+
+      <div class="flex gap-4" style="align-items:center;margin-bottom:12px;">
+        <div class="icon-box" id="calc-header-icon" style="width:52px;height:52px;"></div>
+        <span class="mono-label" style="margin:0;">Technical Tool</span>
+      </div>
+      <h1 class="h1-hero" style="margin-bottom:20px;">Power System <span class="text-teal">Sizing Calculator</span></h1>
+      <p class="section-desc" style="max-width:760px;margin-bottom:56px;">Estimate your power requirements and get recommended system sizing for solar PV, battery storage, and inverter capacity. This tool provides indicative sizing — contact our engineers for a detailed assessment.</p>
+
+      <div class="calc-grid">
+        <div>
+          <div class="calc-card">
+            <div class="calc-header-row">
+              <h2>Connected Loads</h2>
+              <button type="button" id="add-item" class="btn btn-outline-teal" style="min-height:36px;padding:0 16px;">+ Add Item</button>
+            </div>
+            <table class="load-table">
+              <thead>
+                <tr><th>Appliance</th><th>Watts</th><th>Qty</th><th>Hrs/day</th><th>Total</th><th></th></tr>
+              </thead>
+              <tbody id="load-tbody"></tbody>
+            </table>
+            <div class="preset-row" id="preset-row"></div>
+          </div>
+
+          <div class="calc-card">
+            <h2 style="margin-bottom:16px;">System Parameters</h2>
+            <label>System Voltage</label>
+            <div class="voltage-toggle">
+              <button type="button" data-voltage="12">12V</button>
+              <button type="button" data-voltage="24" class="active">24V</button>
+              <button type="button" data-voltage="48">48V</button>
+            </div>
+            <label id="autonomy-label">Backup Autonomy — 1 day(s)</label>
+            <input type="range" id="autonomy-slider" min="1" max="5" step="1" value="1">
+          </div>
+        </div>
+
+        <div class="results-panel">
+          <h2 style="font-size:20px;font-weight:900;margin-bottom:4px;">Results</h2>
+          <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:8px;">Estimated system sizing</p>
+
+          <div class="result-row">
+            <div class="icon-circle" data-ricon="zap"></div>
+            <div>
+              <div class="r-label">Total Load</div>
+              <div class="r-num" id="res-total-load">0W</div>
+              <div class="r-sub" id="res-daily-energy">0 kWh/day</div>
+            </div>
+          </div>
+          <div class="result-row">
+            <div class="icon-circle" data-ricon="sun"></div>
+            <div>
+              <div class="r-label">Solar PV Array</div>
+              <div class="r-num" id="res-solar-watts">0W</div>
+              <div class="r-sub" id="res-solar-kw">0 kW recommended</div>
+            </div>
+          </div>
+          <div class="result-row">
+            <div class="icon-circle" data-ricon="battery"></div>
+            <div>
+              <div class="r-label">Battery Storage</div>
+              <div class="r-num" id="res-battery-ah">0Ah</div>
+              <div class="r-sub" id="res-battery-kwh">0 kWh @ 24V</div>
+            </div>
+          </div>
+          <div class="result-row">
+            <div class="icon-circle" data-ricon="gauge"></div>
+            <div>
+              <div class="r-label">Inverter Size</div>
+              <div class="r-num" id="res-inverter">0W</div>
+              <div class="r-sub">With 25% safety margin</div>
+            </div>
+          </div>
+
+          <a href="contact.html" class="btn btn-primary btn-block" style="margin-top:16px;">Get Detailed Quote &rarr;</a>
+          <p class="calc-footnote">* Estimates only. Contact us for a professional assessment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/main.js"></script>
+<script>
+  window.ACTIVE_PAGE = "";
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector(".back-link").innerHTML = icon("chevronLeft", 18) + "Back to Home";
+    document.getElementById("calc-header-icon").innerHTML = icon("calculator", 26);
+    document.querySelectorAll("[data-ricon]").forEach(el => el.innerHTML = icon(el.dataset.ricon, 20));
+  });
+</script>
+<script src="js/calculator.js"></script>
+</body>
+</html>

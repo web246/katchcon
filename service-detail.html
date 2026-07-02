@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="forest">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Details — KATCHCON</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="page-backdrop" class="page-backdrop"></div>
+<nav id="navbar" class="navbar"></nav>
+<div id="mobile-menu" class="mobile-menu"></div>
+
+<main>
+  <section style="padding-top:160px;">
+    <div class="container" id="detail-mount"></div>
+  </section>
+</main>
+
+<footer id="footer"></footer>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/main.js"></script>
+<script>
+  window.ACTIVE_PAGE = "services";
+  document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get("slug");
+    let index = SERVICES.findIndex(s => s.slug === slug);
+    if (index === -1) index = 0;
+    const service = SERVICES[index];
+    const prev = SERVICES[(index - 1 + SERVICES.length) % SERVICES.length];
+    const next = SERVICES[(index + 1) % SERVICES.length];
+
+    document.title = service.title + " — KATCHCON";
+
+    const mount = document.getElementById("detail-mount");
+    mount.innerHTML = `
+      <a href="services.html" class="back-link">${icon('chevronLeft',18)} All Services</a>
+
+      <div class="detail-hero">
+        <div>
+          <div class="detail-num">${service.number}</div>
+          <div class="title-row"><div class="icon-box">${icon(service.icon, 24)}</div><h1 style="font-size:32px;font-weight:900;">${service.title}</h1></div>
+          <p class="desc" style="margin-top:16px;">${service.short}</p>
+        </div>
+        <div class="bubble-wrap" style="width:360px;height:360px;margin:0 auto;">
+          <div class="bubble-glow"></div>
+          <div class="bubble-morph"><img src="${service.image}" alt="${service.title}"></div>
+        </div>
+      </div>
+
+      <div class="spark-line" style="margin:64px 0;"></div>
+
+      <div class="grid grid-2">
+        <div>
+          <h2 class="h2-section">Service Overview</h2>
+          <p class="desc" style="margin-bottom:24px;">${service.overview}</p>
+          <ul class="checklist">
+            ${service.highlights.map(h => `<li><span class="check-badge">${icon('check',14)}</span><span>${h}</span></li>`).join("")}
+          </ul>
+        </div>
+        <div class="cap-card">
+          <h3 style="font-size:18px;font-weight:900;margin-bottom:16px;">Capabilities</h3>
+          <ul class="cap-num-list">
+            ${service.capabilities.map((c, i) => `<li><span class="idx">${String(i+1).padStart(2,'0')}</span><span class="cap-dot"></span>${c}</li>`).join("")}
+          </ul>
+        </div>
+      </div>
+
+      <div class="spark-line" style="margin:64px 0;"></div>
+
+      <div class="center-col" style="margin-bottom:56px;">
+        <h2 class="h2-section">Interested in ${service.title}?</h2>
+        <p class="section-desc" style="margin:0 auto 24px;">Contact our specialist team to discuss your project requirements.</p>
+        <a href="contact.html" class="btn btn-primary">Get in Touch &rarr;</a>
+      </div>
+
+      <div class="prevnext">
+        <a href="service-detail.html?slug=${prev.slug}">
+          <span class="pn-cap caption">${icon('chevronLeft',14)} Previous</span>
+          <strong>${prev.title}</strong>
+        </a>
+        <a href="service-detail.html?slug=${next.slug}" class="next-link">
+          <span class="pn-cap caption">Next ${icon('chevronRight',14)}</span>
+          <strong>${next.title}</strong>
+        </a>
+      </div>
+    `;
+  });
+</script>
+</body>
+</html>
