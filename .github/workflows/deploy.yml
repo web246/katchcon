@@ -28,10 +28,17 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Prepare site artifact
+        run: |
+          # create a clean public folder with site files only (exclude git and workflow files)
+          mkdir -p public
+          # copy everything except .git, .github and .vscode into public
+          rsync -av --exclude='.git' --exclude='.github' --exclude='.vscode' --exclude='.gitignore' --exclude='README.md' ./ public/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: public
 
       - name: Deploy to GitHub Pages
         id: deployment
