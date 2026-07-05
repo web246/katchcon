@@ -1,26 +1,26 @@
 // layout.js — injects shared navbar / mobile menu / backdrop / footer
 const NAV_LINKS = [
   { label: "Home", href: "index.html", key: "home" },
-  { label: "About Us", href: "about.html", key: "about" },
+  { label: "About", href: "about.html", key: "about" },
   { label: "Services", href: "services.html", key: "services" },
-  { label: "Projects", href: "projects.html", key: "projects" },
-  { label: "Contact Us", href: "contact.html", key: "contact" }
+  { label: "Projects", href: "projects.html", key: "projects" }
 ];
 
-const THEME_ICONS = [
-  { id: "forest", label: "Forest theme", glyph: "🌲" },
-  { id: "solar", label: "Desert theme", glyph: "☀️" },
-  { id: "ocean", label: "Ocean theme", glyph: "🌊" }
-];
-
-function themeSwitchHTML() {
-  return `<div class="theme-switch" role="group" aria-label="Theme switcher">
-    ${THEME_ICONS.map(t => `<button type="button" data-theme-btn="${t.id}" title="${t.label}" aria-label="${t.label}">${t.glyph}</button>`).join("")}
-  </div>`;
+function servicesDropdownHTML(active) {
+  return `
+    <div class="nav-item service-dropdown${active === 'services' ? ' active' : ''}">
+      <button type="button" class="nav-link dropdown-toggle" aria-expanded="false">Services</button>
+      <div class="dropdown-menu">
+        ${SERVICES.map(s => `<a href="service-detail.html?slug=${s.slug}">${s.title}</a>`).join("")}
+      </div>
+    </div>`;
 }
 
 function navLinksHTML(active) {
-  return NAV_LINKS.map(l => `<a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a>`).join("");
+  return NAV_LINKS.map(l => {
+    if (l.key === 'services') return servicesDropdownHTML(active);
+    return `<a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a>`;
+  }).join("");
 }
 
 function backdropHTML() {
@@ -36,19 +36,18 @@ function backdropHTML() {
 
 function navbarHTML(active) {
   return `
-  <div class="container">
+  <div class="container nav-bar-inner">
     <a href="index.html" class="logo">
-      <img src="https://media.base44.com/images/public/6a45437bd8a61bb6bc86af2d/534377da9_image.png" alt="KATCHCON logo">
+      <span class="logo-mark"><span class="mark-text"><span class="text-teal">K</span><span class="text-amber">C</span></span></span>
       <span class="logo-text">
         <span class="name"><span class="text-teal">KATCH</span><span class="text-amber">CON</span></span>
         <span class="caption">Engineering</span>
       </span>
     </a>
-    <div class="nav-links">${navLinksHTML(active)}</div>
-    <div class="nav-right">
-      ${themeSwitchHTML()}
-      <a href="contact.html" class="btn btn-primary">${icon("leaf", 16)} Get Quote</a>
+    <div class="nav-center">
+      <div class="nav-links">${navLinksHTML(active)}</div>
     </div>
+    <a href="contact.html" class="btn btn-primary btn-contact">Contact us</a>
     <button class="hamburger" aria-label="Menu">${icon("menu", 22)}</button>
   </div>`;
 }
@@ -56,20 +55,20 @@ function navbarHTML(active) {
 function mobileMenuHTML(active) {
   return `
   <div class="container">
-    ${NAV_LINKS.map(l => `<a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a>`).join("")}
-    ${themeSwitchHTML()}
-    <a href="contact.html" class="btn btn-primary btn-block">${icon("leaf", 16)} Get Quote</a>
+    ${NAV_LINKS.filter(l => l.key !== 'services').map(l => `<a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a>`).join("")}
+    <div class="mobile-submenu-title">Services</div>
+    ${SERVICES.map(s => `<a href="service-detail.html?slug=${s.slug}">${s.title}</a>`).join("")}
+    <a href="contact.html" class="btn btn-primary btn-block">Contact us</a>
   </div>`;
 }
 
 function footerHTML() {
   return `
-  <div class="spark-line"></div>
   <div class="container">
     <div class="footer-grid">
       <div class="footer-about">
-        <a href="index.html" class="logo">
-          <img src="https://media.base44.com/images/public/6a45437bd8a61bb6bc86af2d/534377da9_image.png" alt="KATCHCON logo">
+        <a href="index.html" class="logo footer-logo">
+          <img src="https://media.base44.com/images/public/6a452fc525159557dcc0066b/5bc7467ff_image.png" alt="KATCHCON" class="footer-logo-img">
           <span class="logo-text">
             <span class="name"><span class="text-teal">KATCH</span><span class="text-amber">CON</span></span>
             <span class="caption">Engineering</span>
@@ -131,6 +130,29 @@ function initChrome(active) {
   if (navbar) navbar.innerHTML = navbarHTML(active);
   if (mobileMenu) mobileMenu.innerHTML = mobileMenuHTML(active);
   if (footer) footer.innerHTML = footerHTML();
+
+  const dropdown = navbar ? navbar.querySelector(".service-dropdown") : null;
+  const toggle = navbar ? navbar.querySelector(".dropdown-toggle") : null;
+  if (dropdown && toggle) {
+    const closeDropdown = () => {
+      dropdown.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+    };
+
+    toggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = dropdown.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    dropdown.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeDropdown);
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!dropdown.contains(event.target)) closeDropdown();
+    });
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => initChrome(window.ACTIVE_PAGE || ""));

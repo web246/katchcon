@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="forest">
+<html lang="en" data-theme="ocean">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -44,7 +44,6 @@
 
       <div class="detail-hero">
         <div>
-          <div class="detail-num">${service.number}</div>
           <div class="title-row"><div class="icon-box">${icon(service.icon, 24)}</div><h1 style="font-size:32px;font-weight:900;">${service.title}</h1></div>
           <p class="desc" style="margin-top:16px;">${service.short}</p>
         </div>
@@ -53,8 +52,6 @@
           <div class="bubble-morph"><img src="${service.image}" alt="${service.title}"></div>
         </div>
       </div>
-
-      <div class="spark-line" style="margin:64px 0;"></div>
 
       <div class="grid grid-2">
         <div>
@@ -67,12 +64,10 @@
         <div class="cap-card">
           <h3 style="font-size:18px;font-weight:900;margin-bottom:16px;">Capabilities</h3>
           <ul class="cap-num-list">
-            ${service.capabilities.map((c, i) => `<li><span class="idx">${String(i+1).padStart(2,'0')}</span><span class="cap-dot"></span>${c}</li>`).join("")}
+            ${service.capabilities.map(c => `<li><span class="cap-dot"></span>${c}</li>`).join("")}
           </ul>
         </div>
       </div>
-
-      <div class="spark-line" style="margin:64px 0;"></div>
 
       <div class="center-col" style="margin-bottom:56px;">
         <h2 class="h2-section">Interested in ${service.title}?</h2>

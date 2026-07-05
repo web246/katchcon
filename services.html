@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="forest">
+<html lang="en" data-theme="ocean">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,20 +42,22 @@
   window.ACTIVE_PAGE = "services";
   document.addEventListener("DOMContentLoaded", () => {
     const wrap = document.getElementById("services-list");
-    wrap.innerHTML = SERVICES.map((s, i) => `
-      <div class="service-row reveal${i % 2 === 1 ? ' reverse' : ''}">
-        <div class="img-col"><img src="${s.image}" alt="${s.title}"></div>
-        <div>
-          <div class="big-num">${s.number}</div>
-          <div class="title-row"><div class="icon-box">${icon(s.icon, 22)}</div><h2>${s.title}</h2></div>
-          <p class="desc">${s.short}</p>
-          <ul class="cap-grid">
-            ${s.capabilities.map(c => `<li><span class="cap-dot"></span>${c}</li>`).join("")}
-          </ul>
-          <a href="service-detail.html?slug=${s.slug}" class="btn btn-outline-teal">View Details &rarr;</a>
-        </div>
+    wrap.innerHTML = `
+      <div class="grid grid-3" style="gap:28px;">
+        ${SERVICES.map(s => `
+          <a href="service-detail.html?slug=${s.slug}" class="card service-card reveal">
+            <div class="service-card-img"><img src="${s.image}" alt="${s.title}"></div>
+            <div class="service-card-body">
+              <div class="title-row"><div class="icon-box">${icon(s.icon, 20)}</div><h3>${s.title}</h3></div>
+              <p>${s.preview}</p>
+              <div style="display:flex;justify-content:flex-end;align-items:center;margin-top:24px;">
+                <span class="link-text">View Details ${icon('arrowRight',16)}</span>
+              </div>
+            </div>
+          </a>
+        `).join("")}
       </div>
-    `).join("");
+    `;
     wrap.querySelectorAll(".reveal").forEach(el => {
       const io = new IntersectionObserver((entries) => {
         entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); } });

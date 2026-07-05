@@ -1,13 +1,366 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="forest">
+<html lang="en" data-theme="ocean">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KATCHCON — Engineering a Sustainable Future</title>
 <meta name="description" content="KATCHCON is a privately owned engineering consultancy delivering high-quality power and energy solutions across sub-Saharan Africa.">
 <link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  .katchcon-map-demo {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    color: #ffffff;
+    background: #0b0d0e;
+    padding: 0;
+    margin: 0;
+  }
+
+  .katchcon-map-demo .map-container {
+    --bg-panel: rgba(26, 29, 29, 0.85);
+    --text-white: #ffffff;
+    --text-muted: #a0a0a0;
+    --link-air: #5c9dff;
+    --link-sea: #3366cc;
+    --link-land: #d1d1d1;
+    --hub-yellow: #ffcc00;
+    --badge-bg: #000000;
+    width: 100vw;
+    height: 70vh;
+    min-height: 500px;
+    position: relative;
+    overflow: hidden;
+    background: #0d1011;
+  }
+
+  .katchcon-map-demo .map-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 60% 45%, rgba(255, 204, 0, 0.06), transparent 35%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .katchcon-map-demo .map-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    /* use the local map image (map.png) in the project root */
+    background-image: url('map.png');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.95) contrast(1.02) saturate(1);
+    transform: scale(1.02);
+  }
+
+  .katchcon-map-demo .map-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    /* lighter overlay so the map is visible */
+    background: rgba(10, 10, 15, 0.28);
+  }
+
+  .katchcon-map-demo .links-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .katchcon-map-demo .links-overlay path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* higher contrast but keep strokes thin */
+    opacity: 1;
+  }
+
+  .katchcon-map-demo .link-air {
+    stroke: var(--link-air);
+    stroke-width: 0.45; /* thin */
+    stroke-dasharray: 6 4; /* clear dash spacing */
+    opacity: 1;
+    animation: dashFlow 1.8s linear infinite;
+    filter: drop-shadow(0 1px 2px rgba(92,157,255,0.18));
+  }
+
+  .katchcon-map-demo .link-sea {
+    stroke: var(--link-sea);
+    stroke-width: 0.45;
+    stroke-dasharray: 7 4;
+    opacity: 1;
+    animation: dashFlow 2.8s linear infinite;
+    filter: drop-shadow(0 1px 2px rgba(51,102,204,0.16));
+  }
+
+  .katchcon-map-demo .link-land {
+    stroke: var(--link-land);
+    stroke-width: 0.38;
+    stroke-dasharray: 5 3;
+    opacity: 0.95;
+    animation: dashFlow 2.2s linear infinite;
+    filter: drop-shadow(0 1px 2px rgba(209,209,209,0.12));
+  }
+
+  /* slightly larger emoji markers with subtle shadow for readability */
+  .katchcon-map-demo .links-overlay text { font-size: 4px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.45)); }
+
+  .katchcon-map-demo .markers {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+  }
+
+  .katchcon-map-demo .city-marker {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #000000;
+    color: #ffffff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+    white-space: nowrap;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    user-select: none;
+  }
+
+  .katchcon-map-demo .city-marker .marker-dot {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ffffff;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .katchcon-map-demo .city-marker.hub {
+    border-color: var(--hub-yellow);
+  }
+
+  .katchcon-map-demo .city-marker.hub .marker-dot {
+    background: var(--hub-yellow);
+    box-shadow: 0 0 6px var(--hub-yellow);
+  }
+
+  .katchcon-map-demo .city-marker:hover,
+  .katchcon-map-demo .city-marker.is-active {
+    transform: translate(-50%, -50%) scale(1.1);
+    border-color: var(--hub-yellow);
+    box-shadow: 0 0 0 1px rgba(255, 204, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .katchcon-map-demo .city-badge {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: var(--badge-bg);
+    color: var(--hub-yellow);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--hub-yellow);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* Hide the 'KATCHCON' badges on the map */
+  .katchcon-map-demo .city-badge { display: none !important; }
+
+  .katchcon-map-demo .panel {
+    position: absolute;
+    z-index: 10;
+    background: var(--bg-panel);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  .katchcon-map-demo .info-panel {
+    top: 20px;
+    left: 20px;
+    padding: 16px 20px;
+  }
+
+  .katchcon-map-demo .info-panel h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-white);
+    letter-spacing: 1.5px;
+  }
+
+  .katchcon-map-demo .info-panel .subtitle-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    color: var(--link-air);
+    font-size: 11px;
+  }
+
+  .katchcon-map-demo .info-panel .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #00ff88;
+    box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+    animation: pulse 2s infinite;
+  }
+
+  .katchcon-map-demo .legend-panel {
+    top: 20px;
+    right: 20px;
+    padding: 14px 16px;
+  }
+
+  .katchcon-map-demo .legend-panel .legend-title {
+    margin: 0 0 8px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .katchcon-map-demo .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    color: var(--text-white);
+    margin-bottom: 6px;
+  }
+
+  .katchcon-map-demo .legend-row:last-child {
+    margin-bottom: 0;
+  }
+
+  .katchcon-map-demo .legend-line {
+    width: 28px;
+    height: 1px;
+    display: inline-block;
+    border-top: 1px dashed currentColor;
+    opacity: 0.9;
+  }
+
+  .katchcon-map-demo .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--hub-yellow);
+    box-shadow: 0 0 8px var(--hub-yellow);
+  }
+
+  .katchcon-map-demo .hub-status {
+    left: 20px;
+    bottom: 20px;
+    padding: 10px 14px;
+    border-left: 3px solid var(--hub-yellow);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .katchcon-map-demo .ke-badge {
+    background: var(--hub-yellow);
+    color: #000000;
+    font-weight: 700;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .katchcon-map-demo .hub-status span:last-child {
+    color: var(--text-white);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  @keyframes dashFlow {
+    to {
+      stroke-dashoffset: -20;
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+    }
+    50% {
+      opacity: 0.6;
+      box-shadow: 0 0 0 6px rgba(0, 255, 136, 0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .katchcon-map-demo .map-container {
+      height: 60vh;
+      min-height: 360px;
+    }
+
+    .katchcon-map-demo .info-panel {
+      top: 12px;
+      left: 12px;
+      padding: 12px 14px;
+    }
+
+    .katchcon-map-demo .info-panel h3 {
+      font-size: 12px;
+    }
+
+    .katchcon-map-demo .info-panel .subtitle-row {
+      font-size: 9px;
+    }
+
+    .katchcon-map-demo .legend-panel {
+      top: 12px;
+      right: 12px;
+      padding: 10px 12px;
+    }
+
+    .katchcon-map-demo .legend-row {
+      font-size: 9px;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+
+    .katchcon-map-demo .hub-status {
+      left: 12px;
+      bottom: 12px;
+      padding: 8px 10px;
+      gap: 8px;
+    }
+
+    .katchcon-map-demo .hub-status span:last-child {
+      font-size: 9px;
+    }
+
+    .katchcon-map-demo .city-marker {
+      font-size: 8px;
+      padding: 2px 6px;
+    }
+  }
+</style>
 </head>
-<body>
+<body class="home-page">
 
 <div id="page-backdrop" class="page-backdrop"></div>
 <nav id="navbar" class="navbar"></nav>
@@ -16,54 +369,35 @@
 <main>
 
   <!-- HERO -->
-  <section class="hero" style="padding-bottom:0;">
-    <div class="slideshow" data-slideshow data-interval="5000">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/d4a37b3f8_generated_09668dba.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/7ec83d310_generated_da5f3c57.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/d70536437_generated_ffc3ef7c.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/d83329bb3_generated_63a793bb.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/970204ae5_generated_f0fd13a5.png" alt="">
-      <img src="https://media.base44.com/images/public/6a452fc525159557dcc0066b/5bc7467ff_image.png" alt="">
-    </div>
+  <section class="hero">
+    <video autoplay loop muted playsinline class="hero-video" src="https://assets.mixkit.co/videos/51447/51447-720.mp4"></video>
     <div class="hero-overlay-1"></div>
     <div class="hero-overlay-2"></div>
-    <div class="slide-dots" data-slide-dots></div>
-
-    <div class="hero-bubble bl bubble-wrap">
-      <div class="bubble-glow"></div>
-      <div class="bubble-morph">
-        <video autoplay loop muted playsinline src="https://assets.mixkit.co/videos/51447/51447-720.mp4"></video>
-      </div>
-    </div>
-    <div class="hero-bubble tr bubble-wrap">
-      <div class="bubble-glow"></div>
-      <div class="bubble-morph">
-        <video autoplay loop muted playsinline src="https://assets.mixkit.co/active_storage/video_items/100174/1721166924/100174-video-720.mp4"></video>
-      </div>
-    </div>
 
     <div class="container">
-      <div class="hero-content reveal is-visible">
-        <span class="pill-badge">🍃 10+ Years of Excellence</span>
-        <h1 class="h1-hero">
-          <span><span class="text-teal">KATCH</span><span class="text-amber">CON</span></span>
-          <span>Engineering a</span>
-          <span class="text-gradient-teal">Sustainable Future</span>
-        </h1>
-        <p class="lead">Engineering consultancy delivering high-quality power and energy solutions across sub-Saharan Africa — from renewable generation to smart grid distribution.</p>
-        <div class="hero-buttons">
-          <a href="services.html" class="btn btn-primary">Our Services &rarr;</a>
-          <a href="contact.html" class="btn btn-outline-amber">Contact Us</a>
+      <div class="hero-inner">
+        <div class="hero-content reveal is-visible">
+          <span class="pill-badge">🍃 10+ Years of Excellence</span>
+          <h1 class="h1-hero">
+            <span class="brand-word"><span class="text-teal">KATCH</span><span class="text-amber">CON</span></span>
+            <span>Engineering a</span>
+            <span class="text-gradient-teal">Sustainable Future</span>
+          </h1>
+          <p class="lead">Engineering consultancy delivering high-quality power and energy solutions across sub-Saharan Africa — from renewable generation to smart grid distribution.</p>
+          <div class="hero-buttons">
+            <a href="services.html" class="btn btn-primary">Our Services &rarr;</a>
+            <a href="contact.html" class="btn btn-outline-amber">Contact Us</a>
+          </div>
         </div>
-        <div class="hero-stats">
-          <div class="stat-item" style="text-align:left;"><div class="stat-num">20+</div><div class="caption">Countries</div></div>
-          <div class="stat-item" style="text-align:left;"><div class="stat-num">100+</div><div class="caption">Projects</div></div>
-          <div class="stat-item" style="text-align:left;"><div class="stat-num">4</div><div class="caption">Sectors</div></div>
+        <div class="hero-bubble tr bubble-wrap reveal">
+          <div class="bubble-glow"></div>
+          <div class="bubble-morph">
+            <video autoplay loop muted playsinline src="https://assets.mixkit.co/active_storage/video_items/100174/1721166924/100174-video-720.mp4"></video>
+          </div>
         </div>
       </div>
     </div>
   </section>
-  <div class="container"><div class="spark-line"></div></div>
 
   <!-- ABOUT PREVIEW -->
   <section>
@@ -94,7 +428,6 @@
       </div>
     </div>
   </section>
-  <div class="container"><div class="spark-line"></div></div>
 
   <!-- SERVICES PREVIEW -->
   <section>
@@ -110,7 +443,6 @@
       </div>
     </div>
   </section>
-  <div class="container"><div class="spark-line"></div></div>
 
   <!-- WHY CHOOSE -->
   <section>
@@ -154,7 +486,6 @@
       </div>
     </div>
   </section>
-  <div class="container"><div class="spark-line"></div></div>
 
   <!-- PROJECTS PREVIEW -->
   <section>
@@ -170,70 +501,96 @@
       </div>
     </div>
   </section>
-  <div class="container"><div class="spark-line"></div></div>
 
   <!-- GLOBAL PRESENCE -->
-  <section>
-    <div class="container">
-      <div class="section-eyebrow-block reveal">
-        <span class="mono-label">Global Footprint</span>
-        <h2 class="h2-section">Engineering Impact Across Continents</h2>
-        <p class="section-desc" style="margin:0 auto;">KATCHCON maintains solid partnerships with local and international firms, enabling efficient delivery of multi-disciplinary projects across 20+ countries.</p>
+  <section class="katchcon-map-demo">
+    <div class="map-container">
+      <div class="map-bg"></div>
+      <div class="map-overlay"></div>
+      <svg class="links-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path id="air1" class="link-air" d="M47 27 C 35 29, 29 31, 26 34" />
+        <path id="air2" class="link-air" d="M47 27 C 50 32, 52 35, 54 37" />
+        <path id="air3" class="link-air" d="M54 37 C 58 39, 60 40, 61 42" />
+        <path id="air4" class="link-air" d="M61 42 C 64 44, 66 45, 67 46" />
+        <path id="air5" class="link-air" d="M61 42 C 70 40, 77 39, 81 39" />
+        <path id="air6" class="link-air" d="M67 46 C 72 49, 74 53, 76 56" />
+        <path id="air7" class="link-air" d="M76 56 C 79 48, 80 43, 81 39" />
+        <path id="air8" class="link-air" d="M81 39 C 84 38, 85 37, 86 37" />
+        <path id="air9" class="link-air" d="M76 56 C 82 60, 86 66, 89 73" />
+        <path id="air10" class="link-air" d="M86 37 C 75 32, 42 27, 26 34" />
+        <path id="air11" class="link-air" d="M17 37 C 21 35, 24 35, 26 34" />
+        <path id="air12" class="link-air" d="M47 27 C 51 34, 55 44, 58 55" />
+        <path id="air13" class="link-air" d="M58 55 C 56 53, 56 53, 56 53" />
+        <path id="air14" class="link-air" d="M61 42 C 60 48, 59 52, 58 55" />
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air1"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air2"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air3"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air4"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air5"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air6"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air7"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air8"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air9"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air10"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air11"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air12"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air13"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air14"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <path id="air15" class="link-air" d="M20 50 C 30 48, 38 46, 45 44" />
+        <path id="air16" class="link-air" d="M10 60 C 20 58, 30 56, 40 54" />
+        <path id="air17" class="link-air" d="M30 20 C 40 22, 50 24, 60 26" />
+        <path id="air18" class="link-air" d="M70 30 C 65 35, 60 40, 55 45" />
+        <path id="air19" class="link-air" d="M25 65 C 35 60, 50 55, 65 50" />
+        <path id="air20" class="link-air" d="M80 50 C 74 48, 68 46, 62 44" />
+        <g><animateMotion dur="6s" repeatCount="indefinite" rotate="auto"><mpath href="#air15"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6.4s" repeatCount="indefinite" rotate="auto"><mpath href="#air16"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="5.6s" repeatCount="indefinite" rotate="auto"><mpath href="#air17"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="6.2s" repeatCount="indefinite" rotate="auto"><mpath href="#air18"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="7s" repeatCount="indefinite" rotate="auto"><mpath href="#air19"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <g><animateMotion dur="5.8s" repeatCount="indefinite" rotate="auto"><mpath href="#air20"/></animateMotion><text x="0" y="0" font-size="3" fill="#5c9dff">✈</text></g>
+        <path id="sea1" class="link-sea" d="M59 58 C 64 54, 68 50, 67 46" />
+        <path id="sea2" class="link-sea" d="M59 58 C 67 56, 72 56, 76 56" />
+        <path id="sea3" class="link-sea" d="M59 58 C 61 50, 61 46, 61 42" />
+        <path id="sea4" class="link-sea" d="M76 56 C 82 63, 85 68, 89 73" />
+        <path id="sea5" class="link-sea" d="M49 52 C 41 60, 38 67, 34 71" />
+        <path id="sea6" class="link-sea" d="M52 75 C 54 72, 55 71, 56 69" />
+        <path id="sea7" class="link-sea" d="M67 46 C 73 43, 77 41, 81 39" />
+        <g><animateMotion dur="10s" repeatCount="indefinite" rotate="auto"><mpath href="#sea1"/></animateMotion><text x="0" y="0" font-size="3" fill="#3366cc">⚓</text></g>
+        <g><animateMotion dur="10s" repeatCount="indefinite" rotate="auto"><mpath href="#sea2"/></animateMotion><text x="0" y="0" font-size="3" fill="#3366cc">⚓</text></g>
+        <g><animateMotion dur="10s" repeatCount="indefinite" rotate="auto"><mpath href="#sea3"/></animateMotion><text x="0" y="0" font-size="3" fill="#3366cc">⚓</text></g>
+        <g><animateMotion dur="10s" repeatCount="indefinite" rotate="auto"><mpath href="#sea4"/></animateMotion><text x="0" y="0" font-size="3" fill="#3366cc">⚓</text></g>
+        <g><animateMotion dur="10s" repeatCount="indefinite" rotate="auto"><mpath href="#sea5"/></animateMotion><text x="0" y="0" font-size="3" fill="#3366cc">⚓</text></g>
+        <g><animateMotion dur="10s" repeatCount="indefinite" rotate="auto"><mpath href="#sea6"/></animateMotion><text x="0" y="0" font-size="3" fill="#3366cc">⚓</text></g>
+        <g><animateMotion dur="10s" repeatCount="indefinite" rotate="auto"><mpath href="#sea7"/></animateMotion><text x="0" y="0" font-size="3" fill="#3366cc">⚓</text></g>
+        <path id="land1" class="link-land" d="M58 55 C 58 57, 59 58, 59 58" />
+        <path id="land2" class="link-land" d="M58 55 C 56 54, 56 53, 56 53" />
+        <path id="land3" class="link-land" d="M54 37 C 51 44, 49 48, 49 52" />
+        <path id="land4" class="link-land" d="M56 69 C 54 72, 52 74, 52 75" />
+        <path id="land5" class="link-land" d="M49 52 C 54 54, 57 55, 58 55" />
+        <g><animateMotion dur="8s" repeatCount="indefinite" rotate="auto"><mpath href="#land1"/></animateMotion><text x="0" y="0" font-size="2.5" fill="#d1d1d1">🚛</text></g>
+        <g><animateMotion dur="8s" repeatCount="indefinite" rotate="auto"><mpath href="#land2"/></animateMotion><text x="0" y="0" font-size="2.5" fill="#d1d1d1">🚛</text></g>
+        <g><animateMotion dur="8s" repeatCount="indefinite" rotate="auto"><mpath href="#land3"/></animateMotion><text x="0" y="0" font-size="2.5" fill="#d1d1d1">🚛</text></g>
+        <g><animateMotion dur="8s" repeatCount="indefinite" rotate="auto"><mpath href="#land4"/></animateMotion><text x="0" y="0" font-size="2.5" fill="#d1d1d1">🚛</text></g>
+        <g><animateMotion dur="8s" repeatCount="indefinite" rotate="auto"><mpath href="#land5"/></animateMotion><text x="0" y="0" font-size="2.5" fill="#d1d1d1">🚛</text></g>
+      </svg>
+      <div class="markers"></div>
+      <div class="panel info-panel">
+        <h3>KATCHCON GLOBAL NETWORK</h3>
+        <div class="subtitle-row"><span class="pulse-dot"></span><span>18 Active Links • 7 Regions</span></div>
       </div>
-      <div class="map-card reveal">
-        <div class="map-img-wrap">
-          <img src="https://media.base44.com/images/public/user_69940e0c1c22747178fc9be6/b13801039_90c0b82c-6672-42cb-bd36-f2db80b11b0f.jpg" alt="World map showing KATCHCON's global presence">
-          <div class="map-dot" style="top:42%;left:56%;"></div>
-          <div class="map-dot" style="top:55%;left:52%;"></div>
-          <div class="map-dot" style="top:38%;left:48%;"></div>
-        </div>
-        <div class="stat-strip">
-          <div class="stat-item"><div class="stat-num">8+</div><div class="caption">East Africa</div></div>
-          <div class="stat-item"><div class="stat-num">5+</div><div class="caption">West Africa</div></div>
-          <div class="stat-item"><div class="stat-num">4+</div><div class="caption">Southern Africa</div></div>
-          <div class="stat-item"><div class="stat-num">5+</div><div class="caption">International</div></div>
-        </div>
+      <div class="panel legend-panel">
+        <p class="legend-title">Legend</p>
+        <div class="legend-row"><span class="legend-line" style="border-color: #5c9dff;"></span><span>Air</span></div>
+        <div class="legend-row"><span class="legend-line" style="border-color: #3366cc;"></span><span>Sea</span></div>
+        <div class="legend-row"><span class="legend-line" style="border-color: #d1d1d1;"></span><span>Land</span></div>
+        <div class="legend-row"><span class="legend-dot"></span><span>Kenya Hub</span></div>
+      </div>
+      <div class="panel hub-status">
+        <span class="ke-badge">KE</span>
+        <span>Primary Hub: Nairobi / Mombasa</span>
       </div>
     </div>
   </section>
-  <div class="container"><div class="spark-line"></div></div>
-
-  <!-- WHAT'S NEXT -->
-  <section class="whatsnext">
-    <div class="slideshow" data-slideshow data-interval="4000">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/a88240d4d_generated_image.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/742d67929_generated_44b79995.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/e5f0abab4_generated_138702e0.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/970204ae5_generated_f0fd13a5.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/d83329bb3_generated_63a793bb.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/367742b2c_generated_582930e1.png" alt="">
-      <img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/d2e6eae6e_generated_d76d0dca.png" alt="">
-    </div>
-    <div class="overlay"></div>
-    <div class="container center-col reveal">
-      <span class="pill-badge">⚡ What's Next</span>
-      <h2 class="h2-section">What would you like to do next?</h2>
-      <p class="section-desc" style="margin:0 auto 40px;">Take the next step in powering your project forward.</p>
-      <div style="text-align:left;">
-        <a href="calculator.html" class="next-row">
-          <div class="icon-box"></div>
-          <div><h4>Add technical calculator</h4><p>Help clients estimate power needs and system sizing</p></div>
-          <span class="arrow"></span>
-        </a>
-        <a href="projects.html" class="next-row">
-          <div class="icon-box amber"></div>
-          <div><h4>Build project testimonials</h4><p>Showcase client success stories and build trust</p></div>
-          <span class="arrow"></span>
-        </a>
-        <a href="contact.html" class="next-row">
-          <div class="icon-box"></div>
-          <div><h4>Sync meeting requests</h4><p>Let clients book consultation appointments automatically</p></div>
-          <span class="arrow"></span>
-        </a>
-      </div>
-    </div>
-  </section>
-  <div class="container"><div class="spark-line"></div></div>
 
   <!-- CLOSING CTA -->
   <section>
@@ -271,10 +628,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     const whyIcons = ["headphones","award","building2","siren","cpu","globe"];
     document.querySelectorAll(".why-card .icon-box").forEach((el, i) => { el.innerHTML = icon(whyIcons[i], 22); });
-    document.querySelectorAll(".next-row .icon-box")[0].innerHTML = icon("calculator", 22);
-    document.querySelectorAll(".next-row .icon-box")[1].innerHTML = icon("quote", 22);
-    document.querySelectorAll(".next-row .icon-box")[2].innerHTML = icon("calendarClock", 22);
-    document.querySelectorAll(".next-row .arrow").forEach(el => el.innerHTML = icon("arrowUpRight", 20));
 
     // Services preview grid
     const grid = document.getElementById("home-services-grid");
@@ -300,6 +653,60 @@
           <div class="stat"><div>${icon('mapPin',18)}</div><div class="num" style="font-size:14px;">${p.location} &middot; ${p.year}</div></div>
         </div>
       </div>`).join("");
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const markerHost = document.querySelector('.katchcon-map-demo .markers');
+    if (!markerHost) return;
+
+    const cities = [
+      { name: 'Los Angeles', left: 17, top: 37, hub: false, badge: true, badgeLeft: 18.7, badgeTop: 34.8 },
+      { name: 'New York', left: 26, top: 34, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'São Paulo', left: 34, top: 71, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'London', left: 47, top: 27, hub: false, badge: true, badgeLeft: 49.2, badgeTop: 24.8 },
+      { name: 'Lagos', left: 49, top: 52, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'Cairo', left: 54, top: 37, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'Addis Ababa', left: 56, top: 53, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'Cape Town', left: 52, top: 75, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'Johannesburg', left: 56, top: 69, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'Nairobi', left: 58, top: 55, hub: true, badge: true, badgeLeft: 61.3, badgeTop: 53.4 },
+      { name: 'Mombasa', left: 59, top: 58, hub: true, badge: true, badgeLeft: 61.8, badgeTop: 56.2 },
+      { name: 'Dubai', left: 61, top: 42, hub: false, badge: true, badgeLeft: 63.4, badgeTop: 40.0 },
+      { name: 'Mumbai', left: 67, top: 46, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'Singapore', left: 76, top: 56, hub: false, badge: true, badgeLeft: 78.3, badgeTop: 54.4 },
+      { name: 'Shanghai', left: 81, top: 39, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'Tokyo', left: 86, top: 37, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 },
+      { name: 'Sydney', left: 89, top: 73, hub: false, badge: false, badgeLeft: 0, badgeTop: 0 }
+    ];
+
+    cities.forEach((city) => {
+      const marker = document.createElement('div');
+      marker.className = `city-marker${city.hub ? ' hub' : ''}`;
+      marker.style.left = `${city.left}%`;
+      marker.style.top = `${city.top}%`;
+      marker.setAttribute('tabindex', '0');
+      marker.setAttribute('aria-label', city.name);
+      marker.innerHTML = `<span class="marker-dot"></span><span>${city.name}</span>`;
+
+      const activate = () => marker.classList.add('is-active');
+      const deactivate = () => marker.classList.remove('is-active');
+
+      marker.addEventListener('mouseenter', activate);
+      marker.addEventListener('mouseleave', deactivate);
+      marker.addEventListener('focus', activate);
+      marker.addEventListener('blur', deactivate);
+      markerHost.appendChild(marker);
+
+      if (city.badge) {
+        const badge = document.createElement('div');
+        badge.className = 'city-badge';
+        badge.style.left = `${city.badgeLeft}%`;
+        badge.style.top = `${city.badgeTop}%`;
+        badge.textContent = 'KATCHCON';
+        markerHost.appendChild(badge);
+      }
+    });
   });
 </script>
 </body>
