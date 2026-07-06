@@ -24,14 +24,12 @@ function navLinksHTML(active) {
 }
 
 function backdropHTML() {
+  // Return only non-SVG backdrop elements — remove SVG lines/planes per request
   return `
   <div class="circuit-grid"></div>
   <div class="glow-blob teal"></div>
   <div class="glow-blob amber"></div>
-  <svg viewBox="0 0 1440 900" preserveAspectRatio="none">
-    ${[120,240,360,480,600,720,840].map(y => `<path d="M0 ${y} Q 180 ${y-20} 360 ${y} T 720 ${y} T 1080 ${y} T 1440 ${y}" stroke="var(--teal)" stroke-width="1.5" fill="none"/>`).join("")}
-    ${[[240,120,'amber'],[720,360,'teal'],[480,540,'amber'],[960,240,'teal'],[1200,600,'amber'],[360,720,'teal']].map(([x,y,c]) => `<circle cx="${x}" cy="${y}" r="4" fill="var(--${c})"/>`).join("")}
-  </svg>`;
+  `;
 }
 
 function navbarHTML(active) {
@@ -47,7 +45,7 @@ function navbarHTML(active) {
     <div class="nav-center">
       <div class="nav-links">${navLinksHTML(active)}</div>
     </div>
-    <a href="contact.html" class="btn btn-primary btn-contact">Contact us</a>
+    <a href="contact.html" class="btn btn-primary btn-contact">Contact us <span class="btn-arrow">${icon("arrowRight",16)}</span></a>
     <button class="hamburger" aria-label="Menu">${icon("menu", 22)}</button>
   </div>`;
 }
@@ -58,7 +56,7 @@ function mobileMenuHTML(active) {
     ${NAV_LINKS.filter(l => l.key !== 'services').map(l => `<a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a>`).join("")}
     <div class="mobile-submenu-title">Services</div>
     ${SERVICES.map(s => `<a href="service-detail.html?slug=${s.slug}">${s.title}</a>`).join("")}
-    <a href="contact.html" class="btn btn-primary btn-block">Contact us</a>
+    <a href="contact.html" class="btn btn-primary btn-block">Contact us <span class="btn-arrow">${icon("arrowRight",16)}</span></a>
   </div>`;
 }
 
@@ -105,9 +103,11 @@ function footerHTML() {
       <div>
         <h4>Contact</h4>
         <ul>
-          <li><a href="tel:+254700000000">+254 700 000 000</a></li>
-          <li><a href="mailto:info@katchcon.co.ke">info@katchcon.co.ke</a></li>
-          <li>Nairobi, Kenya</li>
+          <li>No. 22, Fairfield Gardens, Parliament Road,</li>
+          <li>Syokimau 	6 Nairobi</li>
+          <li>P.O. Box 104695-00101 Nairobi</li>
+          <li><a href="tel:+254721479446">+254 721 479 446</a> | <a href="tel:+254714422423">+254 714 422 423</a></li>
+          <li><a href="mailto:chris@katchcon.co.ke">chris@katchcon.co.ke</a></li>
         </ul>
       </div>
     </div>

@@ -69,12 +69,6 @@
         </div>
       </div>
 
-      <div class="center-col" style="margin-bottom:56px;">
-        <h2 class="h2-section">Interested in ${service.title}?</h2>
-        <p class="section-desc" style="margin:0 auto 24px;">Contact our specialist team to discuss your project requirements.</p>
-        <a href="contact.html" class="btn btn-primary">Get in Touch &rarr;</a>
-      </div>
-
       <div class="prevnext">
         <a href="service-detail.html?slug=${prev.slug}">
           <span class="pn-cap caption">${icon('chevronLeft',14)} Previous</span>
@@ -85,6 +79,42 @@
           <strong>${next.title}</strong>
         </a>
       </div>
+
+      <section>
+        <div class="grid grid-2" style="gap:24px; margin-top:40px;">
+          <div class="cta-card">
+            <div class="cta-card-body">
+              <div class="cta-card-top">
+                <div class="icon-box">${icon('mail',20)}</div>
+                <div>
+                  <span class="pill-badge amber">Contact Support</span>
+                  <h3>Speak with a project specialist</h3>
+                </div>
+              </div>
+              <p>Need a tailored implementation, feasibility check, or technical review? Our team can respond with a proposal aligned to your timeline.</p>
+              <div class="cta-card-actions">
+                <a href="contact.html" class="btn btn-amber">Book a Consultation &rarr;</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="cta-card">
+            <div class="cta-card-body">
+              <div class="cta-card-top amber">
+                <div class="icon-box">${icon('briefcase',20)}</div>
+                <div>
+                  <span class="pill-badge">Explore Services</span>
+                  <h3>See more ways we can help</h3>
+                </div>
+              </div>
+              <p>Browse our full services portfolio and identify the solution package that best fits your energy, transmission, or storage challenge.</p>
+              <div class="cta-card-actions">
+                <a href="services.html" class="btn btn-outline-white">View All Services</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     `;
   });
 </script>
