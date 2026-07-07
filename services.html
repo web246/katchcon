@@ -15,7 +15,7 @@
 
 <main>
 
-  <section style="padding-top:160px;padding-bottom:64px;">
+  <section class="page-hero" style="padding-bottom:64px;">
     <div class="container">
       <div class="center-col reveal">
         <span class="mono-label">Our Expertise</span>
@@ -64,7 +64,7 @@
     wrap.innerHTML = `
       <div class="grid grid-3" style="gap:28px;">
         ${SERVICES.map(s => `
-          <a href="service-detail.html?slug=${s.slug}" class="card service-card reveal">
+          <a href="${s.slug}.html" class="card service-card reveal">
             <div class="service-card-img"><img src="${s.image}" alt="${s.title}"></div>
             <div class="service-card-body">
               <div class="title-row"><div class="icon-box">${icon(s.icon, 20)}</div><h3>${s.title}</h3></div>

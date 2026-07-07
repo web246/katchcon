@@ -20,7 +20,9 @@ const SERVICES = [
       "Solar Park Siting & Design","Energy Resource Assessment","Energy Yield Calculation",
       "Detailed Feasibility Studies","Grid Connection Studies","Construction Supervision",
       "Tests & Commissioning","Asset Performance Management"
-    ]
+    ],
+    ctaHeading: "Ready to Develop Your Solar Project?",
+    ctaDescription: "From site selection through asset performance management, we provide comprehensive solar consultancy. Get in touch to discuss your utility-scale or commercial PV project."
   },
   {
     slug: "wind-power",
@@ -40,7 +42,9 @@ const SERVICES = [
       "Wind Measurements & Campaigns","Energy Resource Assessment","Energy Yield Calculation",
       "Wind Park Design","Detailed Feasibility Studies","Grid Connection Studies",
       "Construction Supervision","Tests & Commissioning"
-    ]
+    ],
+    ctaHeading: "Ready to Harness Wind Power?",
+    ctaDescription: "Our wind team specializes in resource assessment, park design, and grid integration. Reach out to discuss your wind energy project from measurements through commissioning."
   },
   {
     slug: "hydroelectric",
@@ -60,7 +64,9 @@ const SERVICES = [
       "Detailed Feasibility Studies","Hydrological Assessment","Grid Connection Studies",
       "Environmental Impact Analysis","Dam Safety Assessment","Construction Supervision",
       "Tests & Commissioning"
-    ]
+    ],
+    ctaHeading: "Ready to Unlock Hydroelectric Potential?",
+    ctaDescription: "From hydrological assessment to commissioning, we guide hydroelectric projects of all scales. Contact us to explore your dam, run-of-river, or micro-hydro opportunity."
   },
   {
     slug: "transmission",
@@ -80,7 +86,9 @@ const SERVICES = [
       "Power System Analysis","Transmission Line Design","Distribution Network Planning",
       "Substation Design","Detailed Engineering Reviews","Protection & Control Design",
       "Construction Supervision","Tests & Commissioning"
-    ]
+    ],
+    ctaHeading: "Ready to Strengthen Your T&D Network?",
+    ctaDescription: "Our expertise spans transmission line design, substation engineering, and distribution network planning. Let us help you build reliable and efficient power delivery infrastructure."
   },
   {
     slug: "energy-efficiency",
@@ -100,7 +108,9 @@ const SERVICES = [
       "Power & Energy Condition Monitoring","Energy Audits","Efficiency Project Feasibility Studies",
       "Demand Side Management","Construction Supervision","Testing & Commissioning",
       "Verification of Energy Savings"
-    ]
+    ],
+    ctaHeading: "Ready to Cut Energy Costs?",
+    ctaDescription: "Our certified auditors deliver measurable energy savings through monitoring, auditing, and optimization. Contact us to start reducing your energy footprint and costs."
   },
   {
     slug: "energy-storage",
@@ -119,7 +129,9 @@ const SERVICES = [
     capabilities: [
       "Power & Energy Demand Assessment","Optimal BESS Sizing","Battery Type Selection",
       "Use Case Analysis","Feasibility Studies","Construction Supervision","Testing & Commissioning"
-    ]
+    ],
+    ctaHeading: "Ready to Deploy Energy Storage?",
+    ctaDescription: "We design and deliver grid-scale and behind-the-meter BESS solutions tailored to your needs. Let's discuss how energy storage can enhance your power system resilience."
   }
 ];
 

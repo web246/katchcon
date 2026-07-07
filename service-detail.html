@@ -13,7 +13,7 @@
 <div id="mobile-menu" class="mobile-menu"></div>
 
 <main>
-  <section style="padding-top:160px;">
+  <section class="page-hero">
     <div class="container" id="detail-mount"></div>
   </section>
 </main>
@@ -70,11 +70,11 @@
       </div>
 
       <div class="prevnext">
-        <a href="service-detail.html?slug=${prev.slug}">
+        <a href="${prev.slug}.html">
           <span class="pn-cap caption">${icon('chevronLeft',14)} Previous</span>
           <strong>${prev.title}</strong>
         </a>
-        <a href="service-detail.html?slug=${next.slug}" class="next-link">
+        <a href="${next.slug}.html" class="next-link">
           <span class="pn-cap caption">Next ${icon('chevronRight',14)}</span>
           <strong>${next.title}</strong>
         </a>

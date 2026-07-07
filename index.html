@@ -321,10 +321,6 @@
   }
 
   @media (max-width: 768px) {
-    .katchcon-map-demo .map-container {
-      /* allow container to size to the image on small screens */
-    }
-
     .katchcon-map-demo .info-panel {
       top: 12px;
       left: 12px;
@@ -388,13 +384,13 @@
         <div class="hero-content reveal is-visible">
           <span class="pill-badge">🍃 10+ Years of Excellence</span>
           <h1 class="h1-hero">
-            <span class="brand-word"><span class="text-teal">KATCH</span><span class="text-amber">CON</span></span>
-            <span><span class="engineering">Engineering</span> <span class="text-amber">a&nbsp;</span><span class="text-gradient-teal">Sustainable Future</span></span>
+            <span class="hero-brand"><span class="text-teal">KATCH</span><span class="text-amber">CON</span></span>
+            <span class="hero-headline"><span class="text-amber">Engineering a</span> <span class="text-teal">sustainable future</span> for Africa's energy infrastructure</span>
           </h1>
           <p class="lead">Engineering consultancy delivering high-quality power and energy solutions across sub-Saharan Africa — from renewable generation to smart grid distribution.</p>
           <div class="hero-buttons">
             <a href="services.html" class="btn btn-primary">Our Services &rarr;</a>
-          <a href="contact.html" class="btn btn-outline-amber">Contact Us &rarr;</a>
+            <a href="contact.html" class="btn btn-outline-amber">Contact Us &rarr;</a>
           </div>
         </div>
         <div class="hero-bubble tr bubble-wrap reveal">
@@ -532,17 +528,17 @@
       <p class="section-desc" style="margin:0 auto 40px;">Take the next step in powering your project forward.</p>
       <div style="text-align:left;">
         <a href="calculator.html" class="next-row">
-          <div class="icon-box"><img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/d83329bb3_generated_63a793bb.png" alt="calculator logo"></div>
+          <div class="icon-box"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="24" height="24" rx="4" fill="var(--teal)" opacity="0.2"/><rect x="6" y="6" width="20" height="20" rx="3" fill="none" stroke="var(--teal)" stroke-width="1.5"/><rect x="8" y="8" width="16" height="6" rx="1" fill="none" stroke="var(--teal)" stroke-width="1.5"/><line x1="14" y1="16" x2="14" y2="24" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="20" x2="12" y2="20" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="20" x2="20" y2="20" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="24" x2="12" y2="24" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="24" x2="20" y2="24" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
           <div><h4>calculate power output</h4><p>Estimate your solar energy production in minutes</p></div>
           <span class="arrow"></span>
         </a>
         <a href="projects.html" class="next-row">
-          <div class="icon-box amber"><img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/367742b2c_generated_582930e1.png" alt="projects logo"></div>
+          <div class="icon-box amber"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="8" width="24" height="16" rx="3" fill="var(--amber)" opacity="0.2"/><path d="M6 10L12 14L20 8" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="4" y="8" width="24" height="16" rx="3" fill="none" stroke="var(--amber)" stroke-width="1.5"/></svg></div>
           <div><h4>view our project testimonials</h4><p>see completed installations across homes and businesses</p></div>
           <span class="arrow"></span>
         </a>
         <a href="contact.html" class="next-row">
-          <div class="icon-box"><img src="https://media.base44.com/images/public/6a4498cb9123b20110361f7c/d2e6eae6e_generated_d76d0dca.png" alt="contact logo"></div>
+          <div class="icon-box"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="4" width="20" height="24" rx="2" fill="var(--teal)" opacity="0.2"/><rect x="6" y="4" width="20" height="24" rx="2" fill="none" stroke="var(--teal)" stroke-width="1.5"/><circle cx="11" cy="10" r="1.5" fill="var(--teal)"/><circle cx="16" cy="10" r="1.5" fill="var(--teal)"/><line x1="8" y1="14" x2="24" y2="14" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="18" x2="24" y2="18" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="22" x2="16" y2="22" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
           <div><h4>Request a Quote</h4><p>Get a Customized solar solution for your needs</p></div>
           <span class="arrow"></span>
         </a>
@@ -595,7 +591,7 @@
         <div class="service-card-body">
           <div class="title-row"><div class="icon-box">${icon(s.icon, 20)}</div><h3>${s.title}</h3></div>
           <p>${s.preview}</p>
-          <a href="service-detail.html?slug=${s.slug}" class="learn-more">Learn More ${icon('arrowRight',16)}</a>
+          <a href="${s.slug}.html" class="learn-more">Learn More ${icon('arrowRight',16)}</a>
         </div>
       </div>`).join("");
 

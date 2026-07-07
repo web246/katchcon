@@ -11,7 +11,7 @@ function servicesDropdownHTML(active) {
     <div class="nav-item service-dropdown${active === 'services' ? ' active' : ''}">
       <button type="button" class="nav-link dropdown-toggle" aria-expanded="false">Services</button>
       <div class="dropdown-menu">
-        ${SERVICES.map(s => `<a href="service-detail.html?slug=${s.slug}">${s.title}</a>`).join("")}
+        ${SERVICES.map(s => `<a href="${s.slug}.html">${s.title}</a>`).join("")}
       </div>
     </div>`;
 }
@@ -55,7 +55,7 @@ function mobileMenuHTML(active) {
   <div class="container">
     ${NAV_LINKS.filter(l => l.key !== 'services').map(l => `<a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a>`).join("")}
     <div class="mobile-submenu-title">Services</div>
-    ${SERVICES.map(s => `<a href="service-detail.html?slug=${s.slug}">${s.title}</a>`).join("")}
+    ${SERVICES.map(s => `<a href="${s.slug}.html">${s.title}</a>`).join("")}
     <a href="contact.html" class="btn btn-primary btn-block">Contact us <span class="btn-arrow">${icon("arrowRight",16)}</span></a>
   </div>`;
 }
@@ -92,22 +92,12 @@ function footerHTML() {
       <div>
         <h4>Services</h4>
         <ul>
-          <li><a href="service-detail.html?slug=solar-power">Solar Power</a></li>
-          <li><a href="service-detail.html?slug=wind-power">Wind Power</a></li>
-          <li><a href="service-detail.html?slug=hydroelectric">Hydroelectric Power</a></li>
-          <li><a href="service-detail.html?slug=transmission">Transmission &amp; Distribution</a></li>
-          <li><a href="service-detail.html?slug=energy-efficiency">Energy Efficiency</a></li>
-          <li><a href="service-detail.html?slug=energy-storage">Energy Storage</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <ul>
-          <li>No. 22, Fairfield Gardens, Parliament Road,</li>
-          <li>Syokimau 	6 Nairobi</li>
-          <li>P.O. Box 104695-00101 Nairobi</li>
-          <li><a href="tel:+254721479446">+254 721 479 446</a> | <a href="tel:+254714422423">+254 714 422 423</a></li>
-          <li><a href="mailto:chris@katchcon.co.ke">chris@katchcon.co.ke</a></li>
+          <li><a href="solar-power.html">Solar Power</a></li>
+          <li><a href="wind-power.html">Wind Power</a></li>
+          <li><a href="hydroelectric.html">Hydroelectric Power</a></li>
+          <li><a href="transmission.html">Transmission &amp; Distribution</a></li>
+          <li><a href="energy-efficiency.html">Energy Efficiency</a></li>
+          <li><a href="energy-storage.html">Energy Storage</a></li>
         </ul>
       </div>
     </div>
