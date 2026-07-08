@@ -24,6 +24,12 @@
   --amber:#FA9226; --amber-light:#FDB05B; --amber-dark:#CF6E0F;
   --muted:#E8EFF5; --muted-foreground:#5C788C; --border:#C9DCE8; --destructive:#E5484D;
 }
+[data-theme="blue"] {
+  --background:#F0F7F7; --foreground:#0B2E3A; --surface:#FFFFFF; --obsidian:#06212B;
+  --teal:#0F6E8C; --teal-light:#2E93B0; --teal-dark:#083446;
+  --amber:#2FBFA3; --amber-light:#5CD9BE; --amber-dark:#1F8F79;
+  --muted:#DCEEF0; --muted-foreground:#547E87; --border:#BFE0E6; --destructive:#E5484D;
+}
 
 /* ---------- Reset ---------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -240,8 +246,28 @@ body:not(.home-page) nav.navbar{ background:var(--navbar-bg-color, rgba(255,255,
 @media (max-width:767px) {
   .navbar .container{ padding:0 16px; }
   .nav-bar-inner{ gap:12px; }
+  .theme-switcher{ display:none; }
+}
+@media (max-width:1024px) {
+  .theme-switcher{ margin-left:8px; }
 }
 .logo{ display:flex; align-items:center; gap:12px; }
+.theme-switcher{
+  display:inline-flex; align-items:center; gap:6px; padding:6px; border-radius:999px;
+  background:color-mix(in srgb, var(--surface) 92%, transparent);
+  border:1px solid color-mix(in srgb, var(--border) 85%, transparent);
+  box-shadow:0 8px 24px rgba(10,47,62,0.06);
+}
+.theme-switcher-btn{
+  border:none; background:transparent; color:var(--muted-foreground); font-weight:700; font-size:13px;
+  padding:7px 12px; border-radius:999px; cursor:pointer; transition:background .2s ease, color .2s ease, transform .2s ease;
+}
+.theme-switcher-btn:hover{ color:var(--foreground); transform:translateY(-1px); }
+.theme-switcher-btn.is-active{
+  background:linear-gradient(135deg, var(--teal), var(--teal-dark)); color:#fff;
+  box-shadow:0 8px 20px color-mix(in srgb, var(--teal) 25%, transparent);
+}
+.mobile-theme-switcher{ margin:12px 0 16px; }
 .logo-mark{
   width:42px; height:42px; display:flex; align-items:center; justify-content:center;
   border-radius:14px; background:linear-gradient(135deg, color-mix(in srgb, var(--teal) 18%, transparent), color-mix(in srgb, var(--amber) 18%, transparent));

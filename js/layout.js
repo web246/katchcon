@@ -45,6 +45,10 @@ function navbarHTML(active) {
     <div class="nav-center">
       <div class="nav-links">${navLinksHTML(active)}</div>
     </div>
+    <div class="theme-switcher" role="group" aria-label="Theme switcher">
+      <button type="button" class="theme-switcher-btn is-active" data-theme-option="ocean" aria-pressed="true">Green</button>
+      <button type="button" class="theme-switcher-btn" data-theme-option="blue" aria-pressed="false">Blue</button>
+    </div>
     <a href="contact.html" class="btn btn-primary btn-contact">Contact us <span class="btn-arrow">${icon("arrowRight",16)}</span></a>
     <button class="hamburger" aria-label="Menu">${icon("menu", 22)}</button>
   </div>`;
@@ -56,6 +60,10 @@ function mobileMenuHTML(active) {
     ${NAV_LINKS.filter(l => l.key !== 'services').map(l => `<a href="${l.href}"${l.key === active ? ' class="active"' : ''}>${l.label}</a>`).join("")}
     <div class="mobile-submenu-title">Services</div>
     ${SERVICES.map(s => `<a href="${s.slug}.html">${s.title}</a>`).join("")}
+    <div class="theme-switcher mobile-theme-switcher" role="group" aria-label="Theme switcher">
+      <button type="button" class="theme-switcher-btn is-active" data-theme-option="ocean" aria-pressed="true">Green</button>
+      <button type="button" class="theme-switcher-btn" data-theme-option="blue" aria-pressed="false">Blue</button>
+    </div>
     <a href="contact.html" class="btn btn-primary btn-block">Contact us <span class="btn-arrow">${icon("arrowRight",16)}</span></a>
   </div>`;
 }
